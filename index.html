@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="css/variables.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/responsive.css" />
+    <title>Crypto Dash</title>
+  </head>
+  <body>
+    <header class="header">
+      <div class="header__container">
+        <div class="header__logo">
+            <a href="/" class="header__logo-link">
+              <img
+                alt="CryptoDash"
+                src="assets/CryptoDash_Neon_Growth_Logo_dark.png"
+                class="header__logo-img"
+              />
+            </a>
+        </div>
+
+        <nav class="header__nav">
+          <ul class="header__nav-list">
+            <li class="header__nav-item">
+              <a href="#" class="header__nav-link header__nav-link--active"
+                >Home</a
+              >
+            </li>
+            <li class="header__nav-item">
+              <a href="#" class="header__nav-link">Coins</a>
+            </li>
+            <li class="header__nav-item">
+              <a href="#" class="header__nav-link">Watchlist</a>
+            </li>
+            <li class="header__nav-item">
+              <a href="#" class="header__nav-link">About</a>
+            </li>
+          </ul>
+        </nav>
+
+        <form
+          action="/search"
+          method="get"
+          role="search"
+          class="header__search-form"
+        >
+          <label for="search" class="visually-hidden">Search</label>
+          <input
+            type="search"
+            id="search"
+            name="search"
+            class="header__search-input"
+            placeholder="Search coins... (e.g. Bitcoin)"
+          />
+        </form>
+
+        <div class="header__theme-toggle">
+          <button
+            type="button"
+            class="header__toggle-btn header__toggle-btn--light"
+            aria-label="Switch to light mode"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M12 18C8.68629 18 6 15.3137 6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18ZM11 1H13V4H11V1ZM11 20H13V23H11V20ZM3.51472 4.92893L4.92893 3.51472L7.05025 5.63604L5.63604 7.05025L3.51472 4.92893ZM16.9497 18.364L18.364 16.9497L20.4853 19.0711L19.0711 20.4853L16.9497 18.364ZM19.0711 3.51472L20.4853 4.92893L18.364 7.05025L16.9497 5.63604L19.0711 3.51472ZM5.63604 16.9497L7.05025 18.364L4.92893 20.4853L3.51472 19.0711L5.63604 16.9497ZM23 11V13H20V11H23ZM4 11V13H1V11H4Z"
+              ></path>
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="header__toggle-btn header__toggle-btn--dark"
+            aria-label="Switch to dark mode"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M11.3807 2.01886C9.91573 3.38768 9 5.3369 9 7.49999C9 11.6421 12.3579 15 16.5 15C18.6631 15 20.6123 14.0843 21.9811 12.6193C21.6613 17.8537 17.3149 22 12 22C6.47715 22 2 17.5228 2 12C2 6.68514 6.14629 2.33869 11.3807 2.01886Z"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <h1 class="page-title visually-hidden">Crypto Market Dashboard</h1>
+      <section class="market-overview">
+        <div class="market-overview__wrapper">
+          <h2 class="market-overview__title">Market Overview</h2>
+          <div class="market-overview__cards-container">
+            <div
+              class="market-overview__card market-overview__card--market-cap"
+            >
+              <div class="market-overview__icon-wrapper">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M5 3V19H21V21H3V3H5ZM19.9393 5.93934L22.0607 8.06066L16 14.1213L13 11.121L9.06066 15.0607L6.93934 12.9393L13 6.87868L16 9.879L19.9393 5.93934Z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="market-overview__info">
+                <span class="market-overview__label">Total Market Cap</span>
+                <p class="market-overview__value">$2.76T</p>
+                <!-- Element: percentage | Modifier: --positive -->
+                <span
+                  class="market-overview__percentage market-overview__percentage--positive"
+                  >+1.23% (24h)</span
+                >
+              </div>
+            </div>
+
+            <div class="market-overview__card market-overview__card--volume">
+              <div class="market-overview__icon-wrapper">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M8.00488 5.00281H11.0049V14.0028H8.00488V17.0028H6.00488V14.0028H3.00488V5.00281H6.00488V2.00281H8.00488V5.00281ZM5.00488 7.00281V12.0028H9.00488V7.00281H5.00488ZM18.0049 10.0028H21.0049V19.0028H18.0049V22.0028H16.0049V19.0028H13.0049V10.0028H16.0049V7.00281H18.0049V10.0028ZM15.0049 12.0028V17.0028H19.0049V12.0028H15.0049Z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="market-overview__info">
+                <span class="market-overview__label">24h Trading Volume</span>
+                <p class="market-overview__value">$112.45B</p>
+                <span
+                  class="market-overview__percentage market-overview__percentage--positive"
+                  >+8.32% (24h)</span
+                >
+              </div>
+            </div>
+
+            <div class="market-overview__card market-overview__card--dominance">
+              <div class="market-overview__icon-wrapper">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12ZM22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM16.7055 10.564C16.5323 11.6168 15.9806 12.1314 15.235 12.313C16.2271 12.8683 16.7046 13.7112 16.1938 15.1897C15.5586 17.044 14.1367 17.2122 12.2533 16.853L11.7684 18.81L10.6741 18.5388L11.159 16.5818C10.8606 16.5023 10.5571 16.4442 10.2602 16.359L9.77531 18.3161L8.683 18.0454L9.16786 16.0883L6.99194 15.4957L7.53278 14.1119C7.53278 14.1119 8.35407 14.3378 8.34133 14.3236C8.64595 14.3977 8.79489 14.1849 8.85591 14.0359L9.63237 10.8985L10.1975 8.66859C10.2219 8.42756 10.1464 8.11223 9.7013 7.99226C9.7316 7.97451 8.90007 7.7937 8.90007 7.7937L9.2241 6.48228L11.4667 7.03806L11.9416 5.12109L13.0714 5.40109L12.5965 7.31806C12.8882 7.38151 13.1711 7.45862 13.4625 7.53269L13.9374 5.61571L15.0367 5.88814L14.5493 7.85537C15.9358 8.36407 16.9345 9.11777 16.7055 10.564ZM11.6062 10.9543C12.2632 11.1517 14.2111 11.7371 14.5393 10.4337C14.8448 9.19469 13.1568 8.81617 12.3726 8.64033C12.2802 8.61959 12.2003 8.60168 12.1377 8.5855L11.5514 10.9378L11.6062 10.9543ZM10.5917 14.7743L10.6869 14.8025C11.4963 15.0433 13.793 15.7264 14.1045 14.4327C14.4254 13.1868 12.3607 12.7016 11.4363 12.4844C11.335 12.4606 11.2473 12.44 11.1781 12.422L10.5917 14.7743Z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="market-overview__info">
+                <span class="market-overview__label">BTC Dominance</span>
+                <p class="market-overview__value">56.7%</p>
+                <span
+                  class="market-overview__percentage market-overview__percentage--positive"
+                  >+0.12% (24h)</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- watchlist -->
+      <section class="watchlist">
+        <div class="watchlist__wrapper">
+          <div class="watchlist__header">
+            <h2 class="watchlist__title">
+              <span class="watchlist__icon">⭐</span> My Watchlist
+            </h2>
+            <a href="#view-all" class="watchlist__view-all">View all &rarr;</a>
+          </div>
+
+          <div class="watchlist__table-wrapper">
+            <table class="watchlist__table">
+              <thead>
+                <tr>
+                  <th class="watchlist__th watchlist__th--rank">#</th>
+                  <th class="watchlist__th watchlist__th--coin">Coin</th>
+                  <th class="watchlist__th watchlist__th--price">Price</th>
+                  <th class="watchlist__th watchlist__th--1h">1h</th>
+                  <th class="watchlist__th watchlist__th--24h">24h</th>
+                  <th class="watchlist__th watchlist__th--7d">7d</th>
+                  <th class="watchlist__th watchlist__th--chart">
+                    Last 7 Days
+                  </th>
+                  <th class="watchlist__th watchlist__th--action"></th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <!-- Row 2: Bitcoin -->
+                <tr class="watchlist__tr">
+                  <td class="watchlist__td watchlist__td--rank">1</td>
+                  <td class="watchlist__td watchlist__td--coin">
+                    <img
+                      src="https://assets.coingecko.com/coins/images/1/standard/bitcoin.png?1696501400"
+                      alt="BTC"
+                      class="watchlist__coin-logo"
+                    />
+                    <span class="watchlist__coin-name">Bitcoin</span>
+                    <span class="watchlist__coin-symbol">BTC</span>
+                  </td>
+                  <td class="watchlist__td watchlist__td--price">$84,450.32</td>
+                  <td
+                    class="watchlist__td watchlist__td--change watchlist__td--positive"
+                  >
+                    ▲ 0.2%
+                  </td>
+                  <td
+                    class="watchlist__td watchlist__td--change watchlist__td--positive"
+                  >
+                    ▲ 0.5%
+                  </td>
+                  <td
+                    class="watchlist__td watchlist__td--change watchlist__td--positive"
+                  >
+                    ▲ 3.1%
+                  </td>
+                  <td class="watchlist__td watchlist__td--chart">
+                    <div class="watchlist__sparkline">
+                      <img
+                        src="	https://data.coingecko.com/coins/1/sparkline.svg"
+                      />
+                    </div>
+                  </td>
+                  <td class="watchlist__td watchlist__td--action">
+                    <button
+                      type="button"
+                      class="watchlist__star-btn watchlist__star-btn--active"
+                      aria-label="Remove Bitcoin from watchlist"
+                      aria-pressed="true"
+                    >
+                      ★
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- Row 2: Ethereum -->
+                <tr class="watchlist__tr">
+                  <td class="watchlist__td watchlist__td--rank">2</td>
+                  <td class="watchlist__td watchlist__td--coin">
+                    <img
+                      src="https://assets.coingecko.com/coins/images/279/standard/ethereum.png?1696501628"
+                      alt="ETH"
+                      class="watchlist__coin-logo"
+                    />
+                    <span class="watchlist__coin-name">Ethereum</span>
+                    <span class="watchlist__coin-symbol">ETH</span>
+                  </td>
+                  <td class="watchlist__td watchlist__td--price">$2,686.45</td>
+                  <td
+                    class="watchlist__td watchlist__td--change watchlist__td--positive"
+                  >
+                    ▲ 0.1%
+                  </td>
+                  <td
+                    class="watchlist__td watchlist__td--change watchlist__td--positive"
+                  >
+                    ▲ 0.1%
+                  </td>
+                  <td
+                    class="watchlist__td watchlist__td--change watchlist__td--positive"
+                  >
+                    ▲ 2.7%
+                  </td>
+                  <td class="watchlist__td watchlist__td--chart">
+                    <div class="watchlist__sparkline">
+                      <img
+                        src="https://data.coingecko.com/coins/279/sparkline.svg"
+                      />
+                    </div>
+                  </td>
+                  <td class="watchlist__td watchlist__td--action">
+                    <button
+                      type="button"
+                      class="watchlist__star-btn watchlist__star-btn--active"
+                       aria-label="Remove Ethereum from watchlist"
+                       aria-pressed="true"
+                    >
+                      ★
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- coins-table-section -->
+      <section class="coins-table-section">
+        <div class="coins-table__wrapper">
+          <!-- header -->
+          <div class="coins-table-section__header">
+            <h2 class="coins-table-section__title">
+              <span class="coins-table-section__title-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M2 12H4V21H2V12ZM5 14H7V21H5V14ZM16 8H18V21H16V8ZM19 10H21V21H19V10ZM9 2H11V21H9V2ZM12 4H14V21H12V4Z"
+                  ></path>
+                </svg>
+              </span>
+              Top Coins by Market Cap
+            </h2>
+          </div>
+
+          <!-- wrapper -->
+          <div class="coins-table-section__wrapper">
+            <table class="coins-table">
+              <thead>
+                <tr class="coins-table__row coins-table__row--head">
+                  <th class="coins-table__th"></th>
+                  <th class="coins-table__th coins-table__th--center">#</th>
+                  <th class="coins-table__th">Coin</th>
+                  <th class="coins-table__th coins-table__th--right">Price</th>
+                  <th class="coins-table__th coins-table__th--right">1h</th>
+                  <th class="coins-table__th coins-table__th--right">24h</th>
+                  <th class="coins-table__th coins-table__th--right">7d</th>
+                  <th class="coins-table__th coins-table__th--right">
+                    24h Volume
+                  </th>
+                  <th class="coins-table__th coins-table__th--right">
+                    Market Cap
+                  </th>
+                  <th class="coins-table__th coins-table__th--center">Chart</th>
+                  <th class="coins-table__th"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="coins-table__row">
+                  <td class="coins-table__td coins-table__td--action">
+                    <button
+                      type="button"
+                      class="coins-table__star-btn coins-table__star-btn--active"
+                      aria-label="Remove Bitcoin from watchlist"
+                      aria-pressed="true"
+                    >
+                      ★
+                    </button>
+                  </td>
+                  <td
+                    class="coins-table__td coins-table__td--center coins-table__td--muted"
+                  >
+                    1
+                  </td>
+                  <td class="coins-table__td coins-table__td--coin">
+                    <img
+                      src="https://assets.coingecko.com/coins/images/1/standard/bitcoin.png?1696501400"
+                      alt="BTC"
+                      class="coins-table__logo"
+                    />
+                    <div class="coins-table__coin-info">
+                      <span class="coins-table__coin-name">Bitcoin</span>
+                      <span class="coins-table__coin-symbol">BTC</span>
+                    </div>
+                  </td>
+                  <td
+                    class="coins-table__td coins-table__td--right coins-table__td--bold"
+                  >
+                    $84,450.32
+                  </td>
+                  <td
+                    class="coins-table__td coins-table__td--right coins-table__td--positive"
+                  >
+                    ▲ 0.2%
+                  </td>
+                  <td
+                    class="coins-table__td coins-table__td--right coins-table__td--positive"
+                  >
+                    ▲ 0.5%
+                  </td>
+                  <td
+                    class="coins-table__td coins-table__td--right coins-table__td--positive"
+                  >
+                    ▲ 3.1%
+                  </td>
+                  <td class="coins-table__td coins-table__td--right">$45.2B</td>
+                  <td class="coins-table__td coins-table__td--right">$1.67T</td>
+                  <td class="coins-table__td coins-table__td--center">
+                    <div
+                      class="coins-table__chart-placeholder coins-table__chart-placeholder--positive"
+                    >
+                      <img
+                        src="	https://data.coingecko.com/coins/1/sparkline.svg"
+                        alt="bitcoin"
+                      />
+                    </div>
+                  </td>
+                  <td class="coins-table__td coins-table__td--arrow">❯</td>
+                </tr>
+
+                <tr class="coins-table__row">
+                  <td class="coins-table__td coins-table__td--action">
+                    <button
+                      type="button"
+                      class="coins-table__star-btn"
+                      aria-label="Add XRP to watchlist"
+                      aria-pressed="false"
+                    >
+                      ☆
+                    </button>
+                  </td>
+                  <td
+                    class="coins-table__td coins-table__td--center coins-table__td--muted"
+                  >
+                    4
+                  </td>
+                  <td class="coins-table__td coins-table__td--coin">
+                    <img
+                      src="https://assets.coingecko.com/coins/images/44/standard/xrp-symbol-white-128.png?1696501442"
+                      alt="XRP"
+                      class="coins-table__logo"
+                    />
+                    <div class="coins-table__coin-info">
+                      <span class="coins-table__coin-name">XRP</span>
+                      <span class="coins-table__coin-symbol">XRP</span>
+                    </div>
+                  </td>
+                  <td
+                    class="coins-table__td coins-table__td--right coins-table__td--bold"
+                  >
+                    $2.17
+                  </td>
+                  <td
+                    class="coins-table__td coins-table__td--right coins-table__td--negative"
+                  >
+                    ▼ 0.3%
+                  </td>
+                  <td
+                    class="coins-table__td coins-table__td--right coins-table__td--positive"
+                  >
+                    ▲ 0.2%
+                  </td>
+                  <td
+                    class="coins-table__td coins-table__td--right coins-table__td--positive"
+                  >
+                    ▲ 1.8%
+                  </td>
+                  <td class="coins-table__td coins-table__td--right">$3.4B</td>
+                  <td class="coins-table__td coins-table__td--right">
+                    $129.7B
+                  </td>
+                  <td class="coins-table__td coins-table__td--center">
+                    <div
+                      class="coins-table__chart-placeholder coins-table__chart-placeholder--negative"
+                    >
+                      <img
+                        src="	https://data.coingecko.com/coins/44/sparkline.svg"
+                        alt="XRP"
+                      />
+                    </div>
+                  </td>
+                  <td class="coins-table__td coins-table__td--arrow">❯</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div class="coins-table-section__footer">
+            <div class="coins-table-section__info">Showing 1 – 8 of 100</div>
+            <nav class="pagination" aria-label="pagination">
+              <button type="button" class="pagination__btn pagination__btn--disabled" aria-label="Previous page" disabled>
+                ❮
+              </button>
+              <button type="button" class="pagination__btn pagination__btn--active" aria-current="page">1</button>
+              <button type="button" class="pagination__btn">2</button>
+              <button type="button" class="pagination__btn">3</button>
+              <span class="pagination__dots">...</span>
+              <button type="button" class="pagination__btn">13</button>
+              <button type="button" class="pagination__btn" aria-label="Next page">❯</button>
+            </nav>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="main.js"></script>
+    <script type="module" src="watchlist.js"></script>
+  </body>
+</html>

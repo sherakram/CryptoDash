@@ -1,0 +1,195 @@
+/* Tablet */
+@media (max-width: 1024px) {
+  .header__container {
+    gap: 1rem;
+  }
+
+  .header__logo-img {
+    height: 50px;
+  }
+
+  .header__nav-list {
+    gap: 0.5rem;
+  }
+
+  .header__nav-link {
+    font-size: 12px;
+  }
+
+  .header__search-input {
+    width: 250px;
+  }
+
+  .header__search-input::placeholder {
+    font-size: 12px;
+  }
+
+  .header__toggle-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .market-overview__title {
+    font-size: 20px;
+  }
+
+  .market-overview__icon-wrapper svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .market-overview__label {
+    font-size: 12px;
+    margin-bottom: var(--space-4);
+  }
+
+  .market-overview__value {
+    font-size: 26px;
+  }
+
+  .market-overview__percentage {
+    font-size: 12px;
+  }
+
+  .watchlist__title {
+    font-size: 18px;
+  }
+
+  .watchlist__view-all {
+    font-size: 12px;
+  }
+
+  .watchlist__th {
+    font-size: 12px;
+  }
+
+  .watchlist__td {
+    font-size: 12px;
+  }
+
+  .watchlist__coin-symbol {
+    font-size: 12px;
+  }
+
+  .coins-table-section__title {
+    font-size: 20px;
+  }
+
+  .coins-table-section__title-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .coins-table__th {
+    font-size: 12px;
+  }
+
+  .coins-table {
+    font-size: 12px;
+  }
+
+  .coins-table-section__info {
+    font-size: var(--font-size-sm);
+  }
+
+  .pagination__btn {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header__container {
+    flex-wrap: wrap;
+    height: auto;
+    gap: 0.5rem;
+    padding: var(--space-3) var(--space-5);
+  }
+
+  .header__search-form {
+    flex-basis: 100%;
+    order: 4;
+  }
+  .header__search-input {
+    width: 100%;
+  }
+
+  .header__logo-img {
+    height: 60px;
+  }
+
+  .header__logo {
+    order: 1;
+  }
+
+  .header__nav {
+    order: 2;
+  }
+
+  .header__theme-toggle {
+    order: 3;
+  }
+}
+
+/* Mobile */
+@media (max-width: 425px) {
+  .header__container {
+    flex-wrap: wrap;
+    height: auto;
+    gap: 0.5rem;
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .header__logo {
+    order: 1;
+  }
+  
+  .header__nav {
+    display: none;
+  }
+
+  .header__theme-toggle {
+    order: 2;
+  }
+
+  .header__search-form {
+    flex-basis: 100%;
+    order: 3;
+  }
+  .header__search-input {
+    width: 100%;
+  }
+
+  .market-overview__wrapper {
+    padding: var(--space-4);
+  }
+
+  .market-overview__cards-container {
+    flex-direction: column;
+  }
+
+  .watchlist__wrapper {
+    padding: var(--space-4);
+  }
+
+  .coins-table-section {
+    padding: var(--space-4);
+  }
+
+  .coins-table-section__title {
+    font-size: 20px;
+  }
+
+  .coins-table-section__title-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .coins-table-section__footer {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .pagination__btn {
+    font-size: 14px;
+  }
+}
