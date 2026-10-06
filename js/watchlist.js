@@ -9,14 +9,6 @@ export function toggleWatchList(coinId) {
     watchlist.push(coinId);
   }
 
-  // const watchlistCoin = watchlist.find((coin) => coin.id === coinId);
-
-  // if (watchlistCoin) {
-  //   watchlist = watchlist.filter((coin) => coin.id !== coinId);
-  // } else {
-  //   watchlist.push(coinId);
-  // }
-
   return watchlist;
 }
 

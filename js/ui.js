@@ -1,6 +1,13 @@
+import { getWatchList } from "./watchlist.js";
+
+const formatCompactUSD = (value) =>
+  `$${new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 2,
+  }).format(value)}`;
+
 export function displayCryptoDashboard(coins) {
   const tbody = document.querySelector(".coins-table tbody");
-
   tbody.innerHTML = "";
 
   coins.forEach((coin) => {
@@ -95,12 +102,12 @@ export function displayCryptoDashboard(coins) {
 
     const td24Volume = document.createElement("td");
     td24Volume.classList.add("coins-table__td", "coins-table__td--right");
-    td24Volume.textContent = `$${Math.round(coin.total_volume).toLocaleString()}`;
+    td24Volume.textContent = formatCompactUSD(coin.total_volume);
     tr.append(td24Volume);
 
     const tdMarketCap = document.createElement("td");
     tdMarketCap.classList.add("coins-table__td", "coins-table__td--right");
-    tdMarketCap.textContent = `$${coin.market_cap.toLocaleString()}`;
+    tdMarketCap.textContent = formatCompactUSD(coin.market_cap);
     tr.append(tdMarketCap);
 
     const tdMarketChart = document.createElement("td");
@@ -134,8 +141,15 @@ export function displayCryptoDashboard(coins) {
 
 export function renderWatchlist(coins) {
   const tbody = document.querySelector(".watchlist__table tbody");
+  tbody.innerHTML = "";
 
-  coins.forEach((coin) => {
+  const watchlist = getWatchList();
+
+  const watchlistCoins = coins.filter((coin) => {
+    return watchlist.includes(coin.id);
+  });
+
+  watchlistCoins.forEach((coin) => {
     const tr = document.createElement("tr");
     tr.classList.add("coins-table__row");
     tr.setAttribute("data-id", coin.id);
@@ -233,4 +247,39 @@ export function renderWatchlist(coins) {
 
     tbody.append(tr);
   });
+}
+
+export function marketOverview(coins) {
+  const marketInfo = document.querySelector(".market-overview__info");
+  marketInfo.innerHTML = "";
+
+  const totalMarketCap = coins.reduce((sum, coin) => sum + coin.market_cap, 0);
+
+  const totalChange24h = coins.reduce((sum, coin) => {
+    const change = coin.market_cap_change_percentage_24h ?? 0;
+    return sum + change * coin.market_cap;
+  }, 0) / totalMarketCap;
+
+  const marketLabel = document.createElement("span");
+  marketLabel.classList.add("market-overview__label");
+  marketLabel.textContent = "Total Market Cap";
+  marketInfo.append(marketLabel);
+
+  const p = document.createElement("p");
+  p.classList.add("market-overview__value");
+  p.setAttribute("id", "total-market-cap");
+  p.textContent = formatCompactUSD(totalMarketCap);
+  marketInfo.append(p);
+
+  const isPositive = totalChange24h >= 0;
+  const span = document.createElement("span");
+  span.classList.add(
+    "market-overview__percentage",
+    isPositive
+      ? "market-overview__percentage--positive"
+      : "market-overview__percentage--negative"
+  );
+  span.setAttribute("id", "total-market-cap-change");
+  span.textContent = `${isPositive ? "+" : ""}${totalChange24h.toFixed(2)}% (24h)`;
+  marketInfo.append(span);
 }

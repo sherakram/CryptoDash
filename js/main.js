@@ -1,6 +1,8 @@
 import { toggleWatchList, isCoinWatchList, getWatchList } from "./watchlist.js";
 import { fetchTopCoins } from "./api.js";
-import { displayCryptoDashboard } from "./ui.js";
+import { displayCryptoDashboard, renderWatchlist, marketOverview } from "./ui.js";
+
+let cryptoData = [];
 
 const coinsTableBody = document.querySelector(".coins-table tbody");
 
@@ -16,6 +18,8 @@ coinsTableBody.addEventListener("click", (event) => {
 
     const isInWatchlist = isCoinWatchList(coinId);
 
+    renderWatchlist(cryptoData);
+
     coinStarButton.classList.toggle("coins-table__star-btn--active", isInWatchlist);
     coinStarButton.setAttribute("aria-pressed", isInWatchlist);
     coinStarButton.setAttribute("aria-label", isInWatchlist ? `remove ${coinName} from watchlist` : `add ${coinName} to watchlist`);
@@ -23,7 +27,8 @@ coinsTableBody.addEventListener("click", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const cryptoData = await fetchTopCoins();
+  cryptoData = await fetchTopCoins();
   displayCryptoDashboard(cryptoData);
   renderWatchlist(cryptoData);
+  marketOverview(cryptoData);
 });
