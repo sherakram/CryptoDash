@@ -173,7 +173,7 @@ export function displayCryptoDashboard(coins) {
   });
 }
 
-export function renderWatchlist(coins) {
+export function renderWatchlist(coins, addedCoinId = null) {
   const tbody = document.querySelector(".watchlist__table tbody");
   tbody.innerHTML = "";
 
@@ -195,6 +195,10 @@ export function renderWatchlist(coins) {
     tr.classList.add("coins-table__row");
     tr.setAttribute("data-id", coin.id);
     tr.setAttribute("data-name", coin.name);
+
+    if (coin.id === addedCoinId) {
+      tr.classList.add("watchlist__row--enter");
+    }
 
     const tdRank = document.createElement("td");
     tdRank.classList.add("watchlist__td", "watchlist__td--rank");
@@ -324,4 +328,83 @@ export function marketOverview(coins) {
   span.setAttribute("id", "total-market-cap-change");
   span.textContent = `${isPositive ? "+" : ""}${totalChange24h.toFixed(2)}% (24h)`;
   marketInfo.append(span);
+}
+
+function getPageItems(current, total) {
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  const items = [1];
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+
+  if (start > 2) items.push("...");
+  for (let i = start; i <= end; i++) items.push(i);
+  if (end < total - 1) items.push("...");
+  items.push(total);
+
+  return items;
+}
+
+export function renderPagination({ currentPage, totalPages, totalItems, pageSize }) {
+  const nav = document.querySelector("#pagination");
+  const info = document.querySelector("#pagination-info");
+  nav.innerHTML = "";
+
+  const first = totalItems === 0 ? 0 : (currentPage - 1) * pageSize + 1;
+  const last = Math.min(currentPage * pageSize, totalItems);
+  info.textContent = `Showing ${first} – ${last} of ${totalItems}`;
+
+  const makeButton = (label, page, { disabled = false, active = false, ariaLabel } = {}) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.classList.add("pagination__btn");
+    btn.textContent = label;
+    btn.dataset.page = page;
+
+    if (ariaLabel) btn.setAttribute("aria-label", ariaLabel);
+
+    if (disabled) {
+      btn.disabled = true;
+      btn.classList.add("pagination__btn--disabled");
+    }
+
+    if (active) {
+      btn.classList.add("pagination__btn--active");
+      btn.setAttribute("aria-current", "page");
+    }
+
+    return btn;
+  };
+
+  nav.append(
+    makeButton("❮", currentPage - 1, {
+      disabled: currentPage === 1,
+      ariaLabel: "Previous page",
+    }),
+  );
+
+  getPageItems(currentPage, totalPages).forEach((item) => {
+    if (item === "...") {
+      const dots = document.createElement("span");
+      dots.classList.add("pagination__dots");
+      dots.textContent = "...";
+      nav.append(dots);
+    } else {
+      nav.append(
+        makeButton(item, item, {
+          active: item === currentPage,
+          ariaLabel: `Page ${item}`,
+        }),
+      );
+    }
+  });
+
+  nav.append(
+    makeButton("❯", currentPage + 1, {
+      disabled: currentPage === totalPages,
+      ariaLabel: "Next page",
+    }),
+  );
 }
