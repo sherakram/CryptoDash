@@ -12,13 +12,13 @@
     <header class="header">
       <div class="header__container">
         <div class="header__logo">
-            <a href="/" class="header__logo-link">
-              <img
-                alt="CryptoDash"
-                src="assets/CryptoDash_Neon_Growth_Logo_dark.png"
-                class="header__logo-img"
-              />
-            </a>
+          <a href="/" class="header__logo-link">
+            <img
+              alt="CryptoDash"
+              src="assets/CryptoDash_Neon_Growth_Logo_dark.png"
+              class="header__logo-img"
+            />
+          </a>
         </div>
 
         <nav class="header__nav">
@@ -177,6 +177,10 @@
             <a href="#view-all" class="watchlist__view-all">View all &rarr;</a>
           </div>
 
+          <p class="watchlist__empty" role="status">
+            Your watchlist is empty. Click the ★ next to a coin to add it here.
+          </p>
+
           <div class="watchlist__table-wrapper">
             <table class="watchlist__table">
               <thead>
@@ -250,15 +254,32 @@
           <div class="coins-table-section__footer">
             <div class="coins-table-section__info">Showing 1 – 8 of 100</div>
             <nav class="pagination" aria-label="pagination">
-              <button type="button" class="pagination__btn pagination__btn--disabled" aria-label="Previous page" disabled>
+              <button
+                type="button"
+                class="pagination__btn pagination__btn--disabled"
+                aria-label="Previous page"
+                disabled
+              >
                 ❮
               </button>
-              <button type="button" class="pagination__btn pagination__btn--active" aria-current="page">1</button>
+              <button
+                type="button"
+                class="pagination__btn pagination__btn--active"
+                aria-current="page"
+              >
+                1
+              </button>
               <button type="button" class="pagination__btn">2</button>
               <button type="button" class="pagination__btn">3</button>
               <span class="pagination__dots">...</span>
               <button type="button" class="pagination__btn">13</button>
-              <button type="button" class="pagination__btn" aria-label="Next page">❯</button>
+              <button
+                type="button"
+                class="pagination__btn"
+                aria-label="Next page"
+              >
+                ❯
+              </button>
             </nav>
           </div>
         </div>

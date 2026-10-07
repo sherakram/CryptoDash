@@ -249,6 +249,18 @@ body {
   color: var(--color-text-primary);
 }
 
+.watchlist__table-wrapper[hidden],
+.watchlist__empty[hidden] {
+  display: none;
+}
+
+.watchlist__empty {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-md);
+}
+
 .watchlist__table-wrapper {
   overflow-x: auto;
 }
@@ -462,18 +474,18 @@ body {
   cursor: pointer;
 }
 
-.coins-table__chart-placeholder {
-  display: inline-block;
-  width: 100px;
-  height: 36px;
-  cursor: pointer;
+.coins-table__chart-placeholder--positive { 
+  color: var(--color-positive); 
+}
+.coins-table__chart-placeholder--negative { 
+  color: var(--color-negative); 
 }
 
-.coins-table__chart-placeholder img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+.coins-table__chart-placeholder svg,
+.watchlist__sparkline svg {
   display: block;
+  width: 100px;
+  height: 40px;
 }
 
 .coins-table-section__footer {

@@ -6,6 +6,40 @@ const formatCompactUSD = (value) =>
     maximumFractionDigits: 2,
   }).format(value)}`;
 
+function createSparkline(prices) {
+  const NS = "http://www.w3.org/2000/svg";
+  const width = 120;
+  const height = 40;
+
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  const range = max - min || 1;
+
+  const points = prices
+    .map((price, i) => {
+      const x = (i / (prices.length - 1)) * width;
+      const y = height - ((price - min) / range) * height;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(" ");
+
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+  svg.setAttribute("preserveAspectRatio", "none");
+  svg.setAttribute("aria-hidden", "true");
+  svg.classList.add("sparkline");
+
+  const line = document.createElementNS(NS, "polyline");
+  line.setAttribute("points", points);
+  line.setAttribute("fill", "none");
+  line.setAttribute("stroke", "currentColor");
+  line.setAttribute("stroke-width", "1.5");
+  line.setAttribute("vector-effect", "non-scaling-stroke");
+
+  svg.append(line);
+  return svg;
+}
+
 export function displayCryptoDashboard(coins) {
   const tbody = document.querySelector(".coins-table tbody");
   tbody.innerHTML = "";
@@ -114,21 +148,21 @@ export function displayCryptoDashboard(coins) {
     tdMarketChart.classList.add("coins-table__td", "coins-table__td--center");
     tr.append(tdMarketChart);
 
-    const chartPlaceholderBox = document.createElement("div");
-    const is24hPositive =
-      (coin.price_change_percentage_24h_in_currency || 0) >= 0;
-    chartPlaceholderBox.classList.add(
-      "coins-table__chart-placeholder",
-      is24hPositive
-        ? "coins-table__chart-placeholder--positive"
-        : "coins-table__chart-placeholder--negative",
-    );
-    tdMarketChart.append(chartPlaceholderBox);
+    const prices = coin.sparkline_in_7d?.price;
 
-    const marketChartImg = document.createElement("img");
-    marketChartImg.src = `https://data.coingecko.com/coins/1/sparkline.svg`;
-    marketChartImg.setAttribute("alt", coin.name);
-    chartPlaceholderBox.append(marketChartImg);
+    if (prices && prices.length > 1) {
+      const isUp = prices[prices.length - 1] >= prices[0];
+
+      const chartBox = document.createElement("div");
+      chartBox.classList.add(
+        "coins-table__chart-placeholder",
+        isUp
+          ? "coins-table__chart-placeholder--positive"
+          : "coins-table__chart-placeholder--negative",
+      );
+      chartBox.append(createSparkline(prices));
+      tdMarketChart.append(chartBox);
+    }
 
     const tdArrow = document.createElement("td");
     tdArrow.classList.add("coins-table__td", "coins-table__td--arrow");
@@ -148,6 +182,13 @@ export function renderWatchlist(coins) {
   const watchlistCoins = coins.filter((coin) => {
     return watchlist.includes(coin.id);
   });
+
+  const tableWrapper = document.querySelector(".watchlist__table-wrapper");
+  const emptyMessage = document.querySelector(".watchlist__empty");
+
+  const isEmpty = watchlistCoins.length === 0;
+  tableWrapper.hidden = isEmpty;
+  emptyMessage.hidden = !isEmpty;
 
   watchlistCoins.forEach((coin) => {
     const tr = document.createElement("tr");
@@ -218,21 +259,21 @@ export function renderWatchlist(coins) {
     tdMarketChart.classList.add("watchlist__td", "watchlist__td--chart");
     tr.append(tdMarketChart);
 
-    const chartPlaceholderBox = document.createElement("div");
-    const is24hPositive =
-      (coin.price_change_percentage_24h_in_currency || 0) >= 0;
-    chartPlaceholderBox.classList.add(
-      "watchlist__sparkline",
-      is24hPositive
-        ? "coins-table__chart-placeholder--positive"
-        : "coins-table__chart-placeholder--negative",
-    );
-    tdMarketChart.append(chartPlaceholderBox);
+    const prices = coin.sparkline_in_7d?.price;
 
-    const marketChartImg = document.createElement("img");
-    marketChartImg.src = `https://data.coingecko.com/coins/1/sparkline.svg`;
-    marketChartImg.setAttribute("alt", coin.name);
-    chartPlaceholderBox.append(marketChartImg);
+    if (prices && prices.length > 1) {
+      const isUp = prices[prices.length - 1] >= prices[0];
+
+      const chartBox = document.createElement("div");
+      chartBox.classList.add(
+        "watchlist__sparkline",
+        isUp
+          ? "coins-table__chart-placeholder--positive"
+          : "coins-table__chart-placeholder--negative",
+      );
+      chartBox.append(createSparkline(prices));
+      tdMarketChart.append(chartBox);
+    }
 
     const tdStarBtn = document.createElement("td");
     tdStarBtn.classList.add("watchlist__td", "watchlist__td--action");
@@ -255,10 +296,11 @@ export function marketOverview(coins) {
 
   const totalMarketCap = coins.reduce((sum, coin) => sum + coin.market_cap, 0);
 
-  const totalChange24h = coins.reduce((sum, coin) => {
-    const change = coin.market_cap_change_percentage_24h ?? 0;
-    return sum + change * coin.market_cap;
-  }, 0) / totalMarketCap;
+  const totalChange24h =
+    coins.reduce((sum, coin) => {
+      const change = coin.market_cap_change_percentage_24h ?? 0;
+      return sum + change * coin.market_cap;
+    }, 0) / totalMarketCap;
 
   const marketLabel = document.createElement("span");
   marketLabel.classList.add("market-overview__label");
@@ -277,7 +319,7 @@ export function marketOverview(coins) {
     "market-overview__percentage",
     isPositive
       ? "market-overview__percentage--positive"
-      : "market-overview__percentage--negative"
+      : "market-overview__percentage--negative",
   );
   span.setAttribute("id", "total-market-cap-change");
   span.textContent = `${isPositive ? "+" : ""}${totalChange24h.toFixed(2)}% (24h)`;

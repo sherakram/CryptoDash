@@ -4,7 +4,7 @@ const BASE_URL = "https://api.coingecko.com/api/v3/";
 export async function fetchTopCoins() {
   const endpoint = `${BASE_URL}coins/markets`;
 
-  const url = `${endpoint}?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=false&price_change_percentage=1h,24h,7d`;
+  const url = `${endpoint}?vs_currency=usd&order=market_cap_desc&per_page=20&page=1&sparkline=true&price_change_percentage=1h,24h,7d`;
 
   try {
     const response = await fetch(url, {
