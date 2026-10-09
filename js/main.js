@@ -1,11 +1,19 @@
 import { toggleWatchList, isCoinWatchList, getWatchList } from "./watchlist.js";
-import { fetchTopCoins } from "./api.js";
+import { fetchTopCoins, searchCoins, fetchCoinsByIds } from "./api.js";
 import {
   displayCryptoDashboard,
   renderWatchlist,
   marketOverview,
   renderPagination,
 } from "./ui.js";
+import { debounce } from "./utils.js";
+
+let visibleCoins = [];
+
+const searchInput = document.querySelector("#search");
+const searchForm = document.querySelector(".header__search-form");
+const tableStatus = document.querySelector("#table-status");
+let searchController = null;
 
 let cryptoData = [];
 
@@ -18,27 +26,67 @@ const watchlistTableBody = document.querySelector(".watchlist__table tbody");
 
 const themeToggleLight = document.querySelector(".header__toggle-btn--light");
 const themeToggleDark = document.querySelector(".header__toggle-btn--dark");
-const logoImg = document.querySelector('.header__logo-img');
+const logoImg = document.querySelector(".header__logo-img");
 
-const lightLogo = 'assets/CryptoDash_Neon_Growth_Logo_light.png';
-const darkLogo = 'assets/CryptoDash_Neon_Growth_Logo_dark.png'; 
+const lightLogo = "assets/CryptoDash_Neon_Growth_Logo_light.png";
+const darkLogo = "assets/CryptoDash_Neon_Growth_Logo_dark.png";
 
 function setTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
   localStorage.setItem("theme", theme);
 
   if (theme === "light") {
-     logoImg.setAttribute('src', lightLogo);
-     themeToggleLight.classList.add("toggle__Active");
-     themeToggleDark.classList.remove("toggle__Active");
+    logoImg.setAttribute("src", lightLogo);
+    themeToggleLight.classList.add("toggle__Active");
+    themeToggleDark.classList.remove("toggle__Active");
   } else {
-    logoImg.setAttribute('src', darkLogo);
+    logoImg.setAttribute("src", darkLogo);
     themeToggleDark.classList.add("toggle__Active");
     themeToggleLight.classList.remove("toggle__Active");
   }
 }
 const savedTheme = localStorage.getItem("theme") || "dark";
 setTheme(savedTheme);
+
+async function runSearch(rawQuery) {
+  const query = rawQuery.trim();
+
+  searchController?.abort();
+
+  if (query === "") {
+    tableStatus.textContent = "";
+    visibleCoins = cryptoData;
+    currentPage = 1;
+    renderCurrentPage();
+    return;
+  }
+
+  searchController = new AbortController();
+  const { signal } = searchController;
+
+  tableStatus.textContent = `Searching for "${query}"…`;
+
+  try {
+    const matches = await searchCoins(query, signal);
+    const results = await fetchCoinsByIds(
+      matches.map((coin) => coin.id),
+      signal,
+    );
+
+    visibleCoins = results;
+    currentPage = 1;
+    renderCurrentPage();
+
+    tableStatus.textContent =
+      results.length === 0
+        ? `No coins found for "${query}".`
+        : `${results.length} result(s) for "${query}".`;
+  } catch (error) {
+    if (error.name === "AbortError") return;
+    console.error(error);
+    tableStatus.textContent = "Search failed. Please try again.";
+  }
+}
 
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -97,11 +145,11 @@ function handleWatchlistToggle(coinId) {
 }
 
 function renderCurrentPage() {
-  const totalPages = Math.max(1, Math.ceil(cryptoData.length / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(visibleCoins.length / PAGE_SIZE));
   currentPage = Math.min(Math.max(currentPage, 1), totalPages);
 
   const start = (currentPage - 1) * PAGE_SIZE;
-  const pageCoins = cryptoData.slice(start, start + PAGE_SIZE);
+  const pageCoins = visibleCoins.slice(start, start + PAGE_SIZE);
 
   displayCryptoDashboard(pageCoins);
   getWatchList().forEach(updateMainStarButton);
@@ -109,7 +157,7 @@ function renderCurrentPage() {
   renderPagination({
     currentPage,
     totalPages,
-    totalItems: cryptoData.length,
+    totalItems: visibleCoins.length,
     pageSize: PAGE_SIZE,
   });
 }
@@ -120,6 +168,18 @@ themeToggleLight.addEventListener("click", () => {
 
 themeToggleDark.addEventListener("click", () => {
   setTheme("dark");
+});
+
+const debouncedSearch = debounce(runSearch, 400);
+
+searchInput.addEventListener("input", (event) => {
+  debouncedSearch(event.target.value);
+});
+
+searchForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  debouncedSearch.cancel();
+  runSearch(searchInput.value);
 });
 
 coinsTableBody.addEventListener("click", (event) => {
@@ -156,9 +216,8 @@ paginationNav.addEventListener("click", (event) => {
 
 document.addEventListener("DOMContentLoaded", async () => {
   cryptoData = await fetchTopCoins();
+  visibleCoins = cryptoData;
   renderCurrentPage();
   renderWatchlist(cryptoData);
   marketOverview(cryptoData);
 });
-
-
