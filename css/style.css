@@ -116,7 +116,7 @@ body {
   gap: 0.5rem;
   border: 1px solid var(--color-accent-light);
   padding: var(--space-1) var(--space-2);
-  border-radius: 12px;
+  border-radius: var(--radius-xl);
 }
 
 .header__toggle-btn {
@@ -126,14 +126,25 @@ body {
   background: transparent;
   color: var(--color-text-primary);
   border: none;
-  width: 18px;
-  height: 18px;
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  width: 24px;
+  height: 24px;
   cursor: pointer;
+  transition: background-color, 0.3s ease;
+}
+
+.toggle__Active {
+  background-color: var(--color-active-bg);
 }
 
 .header__toggle-btn svg {
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
+}
+
+.header__toggle-btn:hover {
+  background-color: var(--color-active-bg);
 }
 
 /* Market overview Section */

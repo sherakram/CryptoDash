@@ -16,6 +16,30 @@ const paginationNav = document.querySelector("#pagination");
 const coinsTableBody = document.querySelector(".coins-table tbody");
 const watchlistTableBody = document.querySelector(".watchlist__table tbody");
 
+const themeToggleLight = document.querySelector(".header__toggle-btn--light");
+const themeToggleDark = document.querySelector(".header__toggle-btn--dark");
+const logoImg = document.querySelector('.header__logo-img');
+
+const lightLogo = 'assets/CryptoDash_Neon_Growth_Logo_light.png';
+const darkLogo = 'assets/CryptoDash_Neon_Growth_Logo_dark.png'; 
+
+function setTheme(theme) {
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("theme", theme);
+
+  if (theme === "light") {
+     logoImg.setAttribute('src', lightLogo);
+     themeToggleLight.classList.add("toggle__Active");
+     themeToggleDark.classList.remove("toggle__Active");
+  } else {
+    logoImg.setAttribute('src', darkLogo);
+    themeToggleDark.classList.add("toggle__Active");
+    themeToggleLight.classList.remove("toggle__Active");
+  }
+}
+const savedTheme = localStorage.getItem("theme") || "dark";
+setTheme(savedTheme);
+
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -90,6 +114,14 @@ function renderCurrentPage() {
   });
 }
 
+themeToggleLight.addEventListener("click", () => {
+  setTheme("light");
+});
+
+themeToggleDark.addEventListener("click", () => {
+  setTheme("dark");
+});
+
 coinsTableBody.addEventListener("click", (event) => {
   const starButton = event.target.closest(".coins-table__star-btn");
   if (!starButton) return;
@@ -128,3 +160,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   renderWatchlist(cryptoData);
   marketOverview(cryptoData);
 });
+
+

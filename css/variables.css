@@ -43,3 +43,26 @@
   --radius-lg: 10px;
   --radius-xl: 12px;
 }
+
+
+[data-theme="light"] {
+  --color-bg: #F5F3EE;
+  --color-header-bg: #FAF9F6;
+  --color-surface: #FFFEFA;
+  --color-row: #F0EEE8;
+  --color-input-bg: #ECE9E1;
+  --color-sidebar-bg: #FAF9F6;
+  --color-border: #C9C5BC;
+  --color-active-bg: #E5E3F7;
+
+  --color-text-primary: #242424;
+  --color-text-secondary: #454545;
+  --color-text-muted: #595959;
+  --color-text-disabled: #666666;
+
+  --color-accent: #4338CA;
+  --color-accent-light: #4F46A5;
+  --color-positive: #166534;
+  --color-negative: #B42318;
+  --color-star: #8A4B08;
+}
