@@ -5,8 +5,13 @@ import {
   renderWatchlist,
   marketOverview,
   renderPagination,
+  renderCoinSheet,
+  updateSheetStar,
 } from "./ui.js";
 import { debounce } from "./utils.js";
+
+const coinSheet = document.querySelector("#coin-sheet");
+let activeSheetCoinId = null;
 
 let visibleCoins = [];
 
@@ -142,6 +147,10 @@ function handleWatchlistToggle(coinId) {
   } else {
     renderWatchlist(cryptoData, coinId);
   }
+
+  if (coinSheet.open && activeSheetCoinId === coinId) {
+    updateSheetStar(isCoinWatchList(coinId));
+  }
 }
 
 function renderCurrentPage() {
@@ -160,6 +169,44 @@ function renderCurrentPage() {
     totalItems: visibleCoins.length,
     pageSize: PAGE_SIZE,
   });
+}
+
+function findCoin(coinId) {
+  return (
+    visibleCoins.find((coin) => coin.id === coinId) ??
+    cryptoData.find((coin) => coin.id === coinId)
+  );
+}
+
+function openCoinSheet(coinId) {
+  const coin = findCoin(coinId);
+  if (!coin) return;
+
+  activeSheetCoinId = coinId;
+  renderCoinSheet(coin, isCoinWatchList(coinId));
+
+  coinSheet.classList.remove("coin-sheet--closing");
+  coinSheet.showModal();
+  coinSheet.querySelector(".coin-sheet__panel").scrollTop = 0;
+}
+
+function closeCoinSheet() {
+  if (!coinSheet.open || coinSheet.classList.contains("coin-sheet--closing")) return;
+
+  if (prefersReducedMotion()) {
+    coinSheet.close();
+    return;
+  }
+
+  coinSheet.classList.add("coin-sheet--closing");
+
+  const onEnd = (event) => {
+    if (event.target !== coinSheet) return;
+    coinSheet.removeEventListener("animationend", onEnd);
+    coinSheet.classList.remove("coin-sheet--closing");
+    coinSheet.close();
+  };
+  coinSheet.addEventListener("animationend", onEnd);
 }
 
 themeToggleLight.addEventListener("click", () => {
@@ -182,20 +229,50 @@ searchForm.addEventListener("submit", (event) => {
   runSearch(searchInput.value);
 });
 
-coinsTableBody.addEventListener("click", (event) => {
-  const starButton = event.target.closest(".coins-table__star-btn");
-  if (!starButton) return;
+// coinsTableBody.addEventListener("click", (event) => {
+//   const starButton = event.target.closest(".coins-table__star-btn");
+//   if (!starButton) return;
 
-  const coinId = starButton.closest(".coins-table__row").dataset.id;
-  handleWatchlistToggle(coinId);
+//   const coinId = starButton.closest(".coins-table__row").dataset.id;
+//   handleWatchlistToggle(coinId);
+// });
+
+// watchlistTableBody.addEventListener("click", (event) => {
+//   const starButton = event.target.closest(".watchlist__star-btn");
+//   if (!starButton) return;
+
+//   const coinId = starButton.closest("tr").dataset.id;
+//   handleWatchlistToggle(coinId);
+// });
+
+coinsTableBody.addEventListener("click", (event) => {
+  const row = event.target.closest(".coins-table__row");
+  if (!row) return;
+  const coinId = row.dataset.id;
+
+  if (event.target.closest(".coins-table__star-btn")) {
+    handleWatchlistToggle(coinId);
+    return;
+  }
+
+  if (event.target.closest(".coins-table__td--coin, .coins-table__td--arrow")) {
+    openCoinSheet(coinId);
+  }
 });
 
 watchlistTableBody.addEventListener("click", (event) => {
-  const starButton = event.target.closest(".watchlist__star-btn");
-  if (!starButton) return;
+  const row = event.target.closest("tr");
+  if (!row) return;
+  const coinId = row.dataset.id;
 
-  const coinId = starButton.closest("tr").dataset.id;
-  handleWatchlistToggle(coinId);
+  if (event.target.closest(".watchlist__star-btn")) {
+    handleWatchlistToggle(coinId);
+    return;
+  }
+
+  if (event.target.closest(".watchlist__td--coin")) {
+    openCoinSheet(coinId);
+  }
 });
 
 paginationNav.addEventListener("click", (event) => {
@@ -212,6 +289,21 @@ paginationNav.addEventListener("click", (event) => {
   document.querySelector("#main_table").scrollIntoView({
     behavior: prefersReducedMotion() ? "auto" : "smooth",
   });
+});
+
+document.querySelector("#sheet-close").addEventListener("click", closeCoinSheet);
+
+document.querySelector("#sheet-star").addEventListener("click", () => {
+  if (activeSheetCoinId) handleWatchlistToggle(activeSheetCoinId);
+});
+
+coinSheet.addEventListener("cancel", (event) => {
+  event.preventDefault();
+  closeCoinSheet();
+});
+
+coinSheet.addEventListener("close", () => {
+  activeSheetCoinId = null;
 });
 
 document.addEventListener("DOMContentLoaded", async () => {

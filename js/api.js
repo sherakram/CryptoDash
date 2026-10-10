@@ -37,7 +37,7 @@ export async function searchCoins(query, signal) {
     throw new Error(`API Error: ${response.status}`);
   }
 
-  const data = response.json();
+  const data = await response.json();
   return data.coins.slice(0, 10);
 }
 

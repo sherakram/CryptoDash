@@ -206,7 +206,11 @@
 
       <!-- coins-table-section -->
       <section class="coins-table-section" id="main_table">
-        <p class="coins-table-section__status" id="table-status" role="status"></p>
+        <p
+          class="coins-table-section__status"
+          id="table-status"
+          role="status"
+        ></p>
         <div class="coins-table__wrapper">
           <!-- header -->
           <div class="coins-table-section__header">
@@ -255,11 +259,179 @@
           <!-- Pagination -->
           <div class="coins-table-section__footer">
             <div class="coins-table-section__info" id="pagination-info"></div>
-            <nav class="pagination" id="pagination" aria-label="pagination"></nav>
+            <nav
+              class="pagination"
+              id="pagination"
+              aria-label="pagination"
+            ></nav>
           </div>
         </div>
       </section>
     </main>
+
+    <dialog class="coin-sheet" id="coin-sheet" aria-labelledby="sheet-title">
+      <div class="coin-sheet__panel">
+        <div class="coin-sheet__topbar">
+          <button type="button" class="coin-sheet__close" id="sheet-close">
+            <span aria-hidden="true">✕</span> Close
+          </button>
+        </div>
+
+        <div class="coin-sheet__content">
+          <div class="coin-sheet__head">
+            <img
+              class="coin-sheet__logo"
+              id="sheet-logo"
+              alt=""
+              width="48"
+              height="48"
+            />
+            <div class="coin-sheet__heading">
+              <h2
+                class="coin-sheet__title"
+                id="sheet-title"
+                data-field="name"
+              ></h2>
+              <span class="coin-sheet__symbol" data-field="symbol"></span>
+            </div>
+            <button
+              type="button"
+              class="coin-sheet__star"
+              id="sheet-star"
+              aria-pressed="false"
+            >
+              ★
+            </button>
+          </div>
+
+          <div class="coin-sheet__price-row">
+            <p class="coin-sheet__price" data-field="price"></p>
+            <span class="coin-sheet__badge" data-change="change24h"></span>
+          </div>
+
+          <dl class="coin-sheet__stats">
+            <div class="coin-sheet__stat">
+              <dt>Rank</dt>
+              <dd data-field="rank"></dd>
+            </div>
+            <div class="coin-sheet__stat">
+              <dt>Market Cap</dt>
+              <dd data-field="marketCap"></dd>
+            </div>
+            <div class="coin-sheet__stat">
+              <dt>24h Volume</dt>
+              <dd data-field="volume"></dd>
+            </div>
+          </dl>
+
+          <section
+            class="coin-sheet__section"
+            aria-labelledby="sheet-chart-heading"
+          >
+            <h3 class="coin-sheet__subtitle" id="sheet-chart-heading">
+              Last 7 days
+            </h3>
+            <div class="coin-sheet__chart" id="sheet-chart"></div>
+            <div class="coin-sheet__chart-range">
+              <span>Low <strong data-field="chartLow"></strong></span>
+              <span>High <strong data-field="chartHigh"></strong></span>
+            </div>
+          </section>
+
+          <section
+            class="coin-sheet__section"
+            aria-labelledby="sheet-change-heading"
+          >
+            <h3 class="coin-sheet__subtitle" id="sheet-change-heading">
+              Price Change
+            </h3>
+            <dl class="coin-sheet__stats">
+              <div class="coin-sheet__stat">
+                <dt>1h</dt>
+                <dd data-change="change1h"></dd>
+              </div>
+              <div class="coin-sheet__stat">
+                <dt>24h</dt>
+                <dd data-change="change24h"></dd>
+              </div>
+              <div class="coin-sheet__stat">
+                <dt>7d</dt>
+                <dd data-change="change7d"></dd>
+              </div>
+            </dl>
+          </section>
+
+          <section
+            class="coin-sheet__section"
+            aria-labelledby="sheet-range-heading"
+          >
+            <h3 class="coin-sheet__subtitle" id="sheet-range-heading">
+              24h Range
+            </h3>
+            <div class="coin-sheet__range">
+              <span
+                class="coin-sheet__range-marker"
+                id="sheet-range-marker"
+              ></span>
+            </div>
+            <div class="coin-sheet__chart-range">
+              <span data-field="low24h"></span>
+              <span data-field="high24h"></span>
+            </div>
+          </section>
+
+          <section
+            class="coin-sheet__section"
+            aria-labelledby="sheet-stats-heading"
+          >
+            <h3 class="coin-sheet__subtitle" id="sheet-stats-heading">
+              Market Statistics
+            </h3>
+            <dl class="coin-sheet__stats">
+              <div class="coin-sheet__stat">
+                <dt>All-time high</dt>
+                <dd>
+                  <span data-field="ath"></span>
+                  <small data-change="athChange"></small>
+                </dd>
+                <dd class="coin-sheet__note" data-field="athDate"></dd>
+              </div>
+              <div class="coin-sheet__stat">
+                <dt>All-time low</dt>
+                <dd>
+                  <span data-field="atl"></span>
+                  <small data-change="atlChange"></small>
+                </dd>
+                <dd class="coin-sheet__note" data-field="atlDate"></dd>
+              </div>
+              <div class="coin-sheet__stat">
+                <dt>Circulating supply</dt>
+                <dd data-field="circulating"></dd>
+              </div>
+              <div class="coin-sheet__stat">
+                <dt>Total supply</dt>
+                <dd data-field="total"></dd>
+              </div>
+              <div class="coin-sheet__stat">
+                <dt>Max supply</dt>
+                <dd data-field="max"></dd>
+              </div>
+            </dl>
+          </section>
+
+          <a
+            class="coin-sheet__link"
+            id="sheet-link"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View on CoinGecko <span aria-hidden="true">↗</span>
+            <span class="visually-hidden">(opens in a new tab)</span>
+          </a>
+        </div>
+      </div>
+    </dialog>
 
     <script type="module" src="js/main.js"></script>
   </body>

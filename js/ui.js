@@ -166,7 +166,14 @@ export function displayCryptoDashboard(coins) {
 
     const tdArrow = document.createElement("td");
     tdArrow.classList.add("coins-table__td", "coins-table__td--arrow");
-    tdArrow.textContent = "❯";
+
+    const detailsBtn = document.createElement("button");
+    detailsBtn.type = "button";
+    detailsBtn.classList.add("coins-table__details-btn");
+    detailsBtn.setAttribute("aria-label", `View ${coin.name} details`);
+    detailsBtn.setAttribute("aria-haspopup", "dialog");
+    detailsBtn.textContent = "❯";
+    tdArrow.append(detailsBtn);
     tr.append(tdArrow);
 
     tbody.append(tr);
@@ -215,8 +222,10 @@ export function renderWatchlist(coins, addedCoinId = null) {
     img.setAttribute("alt", coin.name);
     tdImage.append(img);
 
-    const coinName = document.createElement("span");
-    coinName.classList.add("watchlist__coin-name");
+    const coinName = document.createElement("button");
+    coinName.type = "button";
+    coinName.classList.add("watchlist__coin-name", "watchlist__coin-btn");
+    coinName.setAttribute("aria-haspopup", "dialog");
     coinName.textContent = coin.name;
     tdImage.append(coinName);
 
@@ -347,7 +356,12 @@ function getPageItems(current, total) {
   return items;
 }
 
-export function renderPagination({ currentPage, totalPages, totalItems, pageSize }) {
+export function renderPagination({
+  currentPage,
+  totalPages,
+  totalItems,
+  pageSize,
+}) {
   const nav = document.querySelector("#pagination");
   const info = document.querySelector("#pagination-info");
   nav.innerHTML = "";
@@ -356,7 +370,11 @@ export function renderPagination({ currentPage, totalPages, totalItems, pageSize
   const last = Math.min(currentPage * pageSize, totalItems);
   info.textContent = `Showing ${first} – ${last} of ${totalItems}`;
 
-  const makeButton = (label, page, { disabled = false, active = false, ariaLabel } = {}) => {
+  const makeButton = (
+    label,
+    page,
+    { disabled = false, active = false, ariaLabel } = {},
+  ) => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.classList.add("pagination__btn");
@@ -407,4 +425,97 @@ export function renderPagination({ currentPage, totalPages, totalItems, pageSize
       ariaLabel: "Next page",
     }),
   );
+}
+
+const orDash = (value, format) =>
+  value === null || value === undefined ? "—" : format(value);
+
+const formatPrice = (value) =>
+  `$${value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`;
+
+const formatPercent = (value) => `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
+
+const formatSupply = (value, symbol) =>
+  `${new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 2 }).format(value)} ${symbol}`;
+
+const formatDate = (iso) =>
+  new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+
+export function updateSheetStar(isInWatchlist) {
+  const btn = document.querySelector("#sheet-star");
+  btn.classList.toggle("coin-sheet__star--active", isInWatchlist);
+  btn.setAttribute("aria-pressed", isInWatchlist);
+}
+
+export function renderCoinSheet(coin, isInWatchlist) {
+  const sheet = document.querySelector("#coin-sheet");
+  const symbol = coin.symbol.toUpperCase();
+  const prices = coin.sparkline_in_7d?.price;
+
+  const fields = {
+    name: coin.name,
+    symbol,
+    price: orDash(coin.current_price, formatPrice),
+    rank: orDash(coin.market_cap_rank, (v) => `#${v}`),
+    marketCap: orDash(coin.market_cap, formatCompactUSD),
+    volume: orDash(coin.total_volume, formatCompactUSD),
+    low24h: orDash(coin.low_24h, formatPrice),
+    high24h: orDash(coin.high_24h, formatPrice),
+    ath: orDash(coin.ath, formatPrice),
+    athDate: orDash(coin.ath_date, formatDate),
+    atl: orDash(coin.atl, formatPrice),
+    atlDate: orDash(coin.atl_date, formatDate),
+    circulating: orDash(coin.circulating_supply, (v) => formatSupply(v, symbol)),
+    total: orDash(coin.total_supply, (v) => formatSupply(v, symbol)),
+    max: orDash(coin.max_supply, (v) => formatSupply(v, symbol)),
+    chartLow: prices ? formatPrice(Math.min(...prices)) : "—",
+    chartHigh: prices ? formatPrice(Math.max(...prices)) : "—",
+  };
+
+  sheet.querySelectorAll("[data-field]").forEach((el) => {
+    el.textContent = fields[el.dataset.field] ?? "—";
+  });
+
+  const changes = {
+    change1h: coin.price_change_percentage_1h_in_currency,
+    change24h: coin.price_change_percentage_24h_in_currency,
+    change7d: coin.price_change_percentage_7d_in_currency,
+    athChange: coin.ath_change_percentage,
+    atlChange: coin.atl_change_percentage,
+  };
+
+  sheet.querySelectorAll("[data-change]").forEach((el) => {
+    const value = changes[el.dataset.change];
+    el.classList.remove("is-positive", "is-negative");
+
+    if (value === null || value === undefined) {
+      el.textContent = "—";
+      return;
+    }
+
+    el.textContent = formatPercent(value);
+    el.classList.add(value >= 0 ? "is-positive" : "is-negative");
+  });
+
+  sheet.querySelector("#sheet-logo").src = coin.image;
+  sheet.querySelector("#sheet-link").href =
+    `https://www.coingecko.com/en/coins/${encodeURIComponent(coin.id)}`;
+
+  const chart = sheet.querySelector("#sheet-chart");
+  chart.innerHTML = "";
+  chart.className = "coin-sheet__chart";
+
+  if (prices && prices.length > 1) {
+    const isUp = prices[prices.length - 1] >= prices[0];
+    chart.classList.add(isUp ? "coin-sheet__chart--up" : "coin-sheet__chart--down");
+    chart.append(createSparkline(prices));
+  }
+
+  const { low_24h: low, high_24h: high, current_price: price } = coin;
+  const percent = high > low ? ((price - low) / (high - low)) * 100 : 50;
+  sheet.querySelector("#sheet-range-marker").style.left =
+    `${Math.min(100, Math.max(0, percent))}%`;
+
+  sheet.querySelector("#sheet-star").setAttribute("aria-label", `${coin.name} in watchlist`);
+  updateSheetStar(isInWatchlist);
 }
