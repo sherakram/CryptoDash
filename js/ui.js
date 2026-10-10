@@ -78,6 +78,9 @@ export function displayCryptoDashboard(coins) {
     img.classList.add("coins-table__logo");
     img.src = coin.image;
     img.setAttribute("alt", coin.name);
+    img.width = 32;
+    img.height = 32;
+    img.loading = "lazy";
     tdImage.append(img);
 
     const coinInfo = document.createElement("div");
@@ -220,6 +223,9 @@ export function renderWatchlist(coins, addedCoinId = null) {
     img.classList.add("watchlist__coin-logo");
     img.src = coin.image;
     img.setAttribute("alt", coin.name);
+    img.width = 32;
+    img.height = 32;
+    img.loading = "lazy";
     tdImage.append(img);
 
     const coinName = document.createElement("button");
@@ -303,40 +309,50 @@ export function renderWatchlist(coins, addedCoinId = null) {
   });
 }
 
-export function marketOverview(coins) {
-  const marketInfo = document.querySelector(".market-overview__info");
-  marketInfo.innerHTML = "";
+export function renderMarketOverview(globalData) {
+  if (!globalData) return;
 
-  const totalMarketCap = coins.reduce((sum, coin) => sum + coin.market_cap, 0);
+  const setText = (id, text) => {
+    document.getElementById(id).textContent = text;
+  };
 
-  const totalChange24h =
-    coins.reduce((sum, coin) => {
-      const change = coin.market_cap_change_percentage_24h ?? 0;
-      return sum + change * coin.market_cap;
-    }, 0) / totalMarketCap;
+  setText("total-market-cap", orDash(globalData.total_market_cap?.usd, formatCompactUSD));
+  setText("total-volume", orDash(globalData.total_volume?.usd, formatCompactUSD));
+  setText(
+    "btc-dominance",
+    orDash(globalData.market_cap_percentage?.btc, (v) => `${v.toFixed(1)}%`),
+  );
 
-  const marketLabel = document.createElement("span");
-  marketLabel.classList.add("market-overview__label");
-  marketLabel.textContent = "Total Market Cap";
-  marketInfo.append(marketLabel);
+  setText(
+    "total-volume-note",
+    orDash(globalData.active_cryptocurrencies, (v) => `Across ${v.toLocaleString()} coins`),
+  );
 
-  const p = document.createElement("p");
-  p.classList.add("market-overview__value");
-  p.setAttribute("id", "total-market-cap");
-  p.textContent = formatCompactUSD(totalMarketCap);
-  marketInfo.append(p);
+  setText(
+    "btc-dominance-note",
+    orDash(globalData.market_cap_percentage?.eth, (v) => `ETH ${v.toFixed(1)}%`),
+  );
 
-  const isPositive = totalChange24h >= 0;
-  const span = document.createElement("span");
-  span.classList.add(
-    "market-overview__percentage",
+  const change = globalData.market_cap_change_percentage_24h_usd;
+  const changeEl = document.getElementById("total-market-cap-change");
+
+  changeEl.classList.remove(
+    "market-overview__percentage--positive",
+    "market-overview__percentage--negative",
+  );
+
+  if (typeof change !== "number") {
+    changeEl.textContent = "";
+    return;
+  }
+
+  const isPositive = change >= 0;
+  changeEl.classList.add(
     isPositive
       ? "market-overview__percentage--positive"
       : "market-overview__percentage--negative",
   );
-  span.setAttribute("id", "total-market-cap-change");
-  span.textContent = `${isPositive ? "+" : ""}${totalChange24h.toFixed(2)}% (24h)`;
-  marketInfo.append(span);
+  changeEl.textContent = `${isPositive ? "+" : ""}${change.toFixed(2)}% (24h)`;
 }
 
 function getPageItems(current, total) {

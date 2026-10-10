@@ -6,7 +6,16 @@
     <link rel="stylesheet" type="text/css" href="css/variables.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <link rel="stylesheet" type="text/css" href="css/responsive.css" />
-    <title>Crypto Dash</title>
+    <title>CryptoDash | Live Crypto Market Dashboard</title>
+    <meta
+      name="description"
+      content="Track the top 100 cryptocurrencies, build a watchlist and explore live market data. Built with vanilla JavaScript and the CoinGecko API."
+    />
+    <meta name="theme-color" content="var(--color-bg)" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📈</text></svg>"
+    />
   </head>
   <body>
     <header class="header">
@@ -35,7 +44,9 @@
               <a href="#watchlist_table" class="header__nav-link">Watchlist</a>
             </li>
             <li class="header__nav-item">
-              <a href="#" class="header__nav-link">About</a>
+              <a href="#" class="header__nav-link" target="_blank" rel="noopener noreferrer">
+                GitHub<span class="visually-hidden"> (opens in a new tab)</span>
+              </a>
             </li>
           </ul>
         </nav>
@@ -61,7 +72,7 @@
           <button
             type="button"
             class="header__toggle-btn header__toggle-btn--light"
-            aria-label="Switch to light mode"
+            aria-label="Light theme"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +87,7 @@
           <button
             type="button"
             class="header__toggle-btn header__toggle-btn--dark"
-            aria-label="Switch to dark mode"
+            aria-label="Dark theme"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -114,10 +125,11 @@
               </div>
               <div class="market-overview__info">
                 <span class="market-overview__label">Total Market Cap</span>
-                <!-- <p class="market-overview__value">$2.76T</p>
+                <p class="market-overview__value" id="total-market-cap">-</p>
                 <span
                   class="market-overview__percentage market-overview__percentage--positive"
-                  >+1.23% (24h)</span> -->
+                  id="total-market-cap-change"
+                ></span>
               </div>
             </div>
 
@@ -135,11 +147,11 @@
               </div>
               <div class="market-overview__info">
                 <span class="market-overview__label">24h Trading Volume</span>
-                <p class="market-overview__value">$112.45B</p>
+                <p class="market-overview__value" id="total-volume">-</p>
                 <span
                   class="market-overview__percentage market-overview__percentage--positive"
-                  >+8.32% (24h)</span
-                >
+                  id="total-volume-note"
+                ></span>
               </div>
             </div>
 
@@ -157,11 +169,11 @@
               </div>
               <div class="market-overview__info">
                 <span class="market-overview__label">BTC Dominance</span>
-                <p class="market-overview__value">56.7%</p>
+                <p class="market-overview__value" id="btc-dominance">-</p>
                 <span
                   class="market-overview__percentage market-overview__percentage--positive"
-                  >+0.12% (24h)</span
-                >
+                  id="btc-dominance-note"
+                ></span>
               </div>
             </div>
           </div>
@@ -184,6 +196,7 @@
 
           <div class="watchlist__table-wrapper">
             <table class="watchlist__table">
+              <caption class="visually-hidden">My Watchlist</caption>
               <thead>
                 <tr>
                   <th class="watchlist__th watchlist__th--rank">#</th>
@@ -195,7 +208,7 @@
                   <th class="watchlist__th watchlist__th--chart">
                     Last 7 Days
                   </th>
-                  <th class="watchlist__th watchlist__th--action"></th>
+                  <th class="watchlist__th watchlist__th--action"><span class="visually-hidden">Remove</span></th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -233,9 +246,10 @@
           <!-- wrapper -->
           <div class="coins-table-section__wrapper">
             <table class="coins-table">
+              <caption class="visually-hidden">Top coins by market cap</caption>
               <thead>
                 <tr class="coins-table__row coins-table__row--head">
-                  <th class="coins-table__th"></th>
+                  <th class="coins-table__th"><span class="visually-hidden">Watchlist</span></th>
                   <th class="coins-table__th coins-table__th--center">#</th>
                   <th class="coins-table__th">Coin</th>
                   <th class="coins-table__th coins-table__th--right">Price</th>
@@ -249,7 +263,7 @@
                     Market Cap
                   </th>
                   <th class="coins-table__th coins-table__th--center">Chart</th>
-                  <th class="coins-table__th"></th>
+                  <th class="coins-table__th"><span class="visually-hidden">Details</span></th>
                 </tr>
               </thead>
               <tbody></tbody>

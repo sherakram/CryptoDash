@@ -3,7 +3,7 @@ import { fetchTopCoins, searchCoins, fetchCoinsByIds } from "./api.js";
 import {
   displayCryptoDashboard,
   renderWatchlist,
-  marketOverview,
+  renderMarketOverview,
   renderPagination,
   renderCoinSheet,
   updateSheetStar,
@@ -39,6 +39,9 @@ const darkLogo = "assets/CryptoDash_Neon_Growth_Logo_dark.png";
 function setTheme(theme) {
   document.documentElement.setAttribute("data-theme", theme);
   localStorage.setItem("theme", theme);
+
+  themeToggleLight.setAttribute("aria-pressed", theme === "light");
+  themeToggleDark.setAttribute("aria-pressed", theme === "dark");
 
   if (theme === "light") {
     logoImg.setAttribute("src", lightLogo);
@@ -307,9 +310,17 @@ coinSheet.addEventListener("close", () => {
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
+  tableStatus.textContent = "Loading coins…";
+  
   cryptoData = await fetchTopCoins();
   visibleCoins = cryptoData;
+
+  tableStatus.textContent =
+    cryptoData.length === 0
+      ? "Couldn't load coins right now. Please try again in a minute."
+      : "";
+
   renderCurrentPage();
   renderWatchlist(cryptoData);
-  marketOverview(cryptoData);
+  renderMarketOverview(cryptoData);
 });

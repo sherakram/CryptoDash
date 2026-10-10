@@ -224,6 +224,11 @@ body {
   color: var(--color-negative);
 }
 
+.market-overview__note {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
 /* Watchlist section */
 .watchlist {
   width: 100%;
