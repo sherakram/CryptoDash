@@ -1,5 +1,5 @@
 import { toggleWatchList, isCoinWatchList, getWatchList } from "./watchlist.js";
-import { fetchTopCoins, searchCoins, fetchCoinsByIds } from "./api.js";
+import { fetchTopCoins, fetchGlobalData, searchCoins, fetchCoinsByIds } from "./api.js";
 import {
   displayCryptoDashboard,
   renderWatchlist,
@@ -311,16 +311,23 @@ coinSheet.addEventListener("close", () => {
 
 document.addEventListener("DOMContentLoaded", async () => {
   tableStatus.textContent = "Loading coins…";
+
+  const [coins, globalData] = await Promise.all([
+    fetchTopCoins(),
+    fetchGlobalData(),
+  ]);
   
-  cryptoData = await fetchTopCoins();
+  cryptoData = coins;
   visibleCoins = cryptoData;
 
   tableStatus.textContent =
     cryptoData.length === 0
-      ? "Couldn't load coins right now. Please try again in a minute."
+      ? import.meta.env.VITE_CG_API_KEY
+        ? "Couldn't load coins right now. Please try again in a minute."
+        : "Missing API key. Copy .env.example to .env and add your CoinGecko key."
       : "";
 
   renderCurrentPage();
   renderWatchlist(cryptoData);
-  renderMarketOverview(cryptoData);
+  renderMarketOverview(globalData);
 });
